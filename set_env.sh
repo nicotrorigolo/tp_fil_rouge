@@ -12,7 +12,7 @@ sudo apt -y install python3-venv
 mkdir ~/myproject
 cd ~/myproject
 mv /home/vagrant/tp_fil_rouge/debut.py .
-mv /home/vagrant/tp_fil_rouge/wsgi.py
+mv /home/vagrant/tp_fil_rouge/wsgi.py .
 python3 -m venv myprojectenv
 source myprojectenv/bin/activate
 
