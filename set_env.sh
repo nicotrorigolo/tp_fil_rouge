@@ -4,6 +4,12 @@ echo "Installation de python"
 sudo apt update
 sudo apt install -y python3-pip python3-dev build-essential libssl-dev libffi-dev python3-setuptools
 
+echo "Installation de nginx"
+sudo apt update
+sudo apt install -y nginx
+
+
+
 echo "Téléchargement des fichiers github"
 git clone https://github.com/nicotrorigolo/tp_fil_rouge
 
@@ -31,3 +37,9 @@ sudo mv /home/vagrant/tp_fil_rouge/debut.service /etc/systemd/system/
 sudo systemctl start debut
 sudo systemctl enable debut
 
+echo "Configuration du Nginx"
+sudo mv /home/vagrant/tp_fil_rouge/debut /etc/nginx/sites-available/
+sudo ln -s /etc/nginx/sites-available/debut /etc/nginx/sites-enabled # Creation du lien
+sudo nginx -t # Permet de verifier que les fichier dans /etc/nginx/sites-available fonctionne
+sudo ufw delete allow 5000
+sudo ufw allow 'Nginx Full'

@@ -1,0 +1,10 @@
+server {
+    listen 80;
+    server_name bogossdu49.tk www.bogossdu49.tk;
+
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/vagrant/myproject/debut.sock;
+    }
+}
