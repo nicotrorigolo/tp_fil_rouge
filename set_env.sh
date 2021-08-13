@@ -24,5 +24,10 @@ sudo ufw allow 5000 # Indication au pare-feu que l'acces au port 5000 est autori
 #echo "Verification que l'application fonctionne"
 #curl 192.168.100.50:5000 # 192.168.100.50 c'est l'adresse IP de la VM master, 5000 c'est le port de l'application
 
-echo "Configuration Gunicorn"
-gunicorn --bind 0.0.0.0:5000 wsgi:app
+echo "Configuration du service Gunicorn"
+#gunicorn --bind 0.0.0.0:5000 wsgi:app
+deactivate # Desactivation du mode env
+sudo mv /home/vagrant/tp_fil_rouge/debut.service /etc/systemd/system/
+sudo systemctl start debut
+sudo systemctl enable debut
+
