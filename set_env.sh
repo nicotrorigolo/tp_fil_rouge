@@ -8,8 +8,6 @@ echo "Installation de nginx"
 sudo apt update
 sudo apt install -y nginx
 
-
-
 echo "Téléchargement des fichiers github"
 git clone https://github.com/nicotrorigolo/tp_fil_rouge
 
@@ -41,5 +39,6 @@ echo "Configuration du Nginx"
 sudo mv /home/vagrant/tp_fil_rouge/debut /etc/nginx/sites-available/
 sudo ln -s /etc/nginx/sites-available/debut /etc/nginx/sites-enabled # Creation du lien
 sudo nginx -t # Permet de verifier que les fichier dans /etc/nginx/sites-available fonctionne
+sudo systemctl restart nginx
 sudo ufw delete allow 5000
 sudo ufw allow 'Nginx Full'
