@@ -1,0 +1,12 @@
+[Unit]
+Description=Gunicorn instance to serve debut
+After=network.target
+
+[Service]
+User=vagrant
+Group=www-data
+WorkingDirectory=/myproject
+ExecStart=/myproject/myprojectenv/bin/gunicorn --workers 3 --bind unix:debut.sock -m 007 wsgi:app
+
+[Install]
+WantedBy=multi-user.target
