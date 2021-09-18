@@ -1,0 +1,156 @@
+- name: Mon Livre I
+  hosts: master
+  become: yes
+  gather_facts: False
+  tasks:
+  - name: Verification de connexion
+    ping:
+
+  - name: Mise à jour systeme
+    apt:
+      upgrade: yes
+      update_cache: yes
+      cache_valid_time: 86400
+
+  - name: Installation de python
+    apt:
+      name:
+        - python3-pip
+        - python3-dev
+        - build-essential
+        - libssl-dev
+        - libffi-dev
+        - python3-setuptools
+      state: present
+
+  - name: Installation de nginx
+    apt:
+      name:
+        - nginx
+      state: present
+
+  # - name: Creation de dossier tp_fil_rouge
+  #   file:
+  #     path: "/home/vagrant/tp_fil_rouge"
+  #     state: directory 
+  #     owner: vagrant
+  #     group: vagrant
+  #     mode: 0755
+
+  - name: Creation de dossier myproject
+    file:
+      path: "/home/vagrant/myproject"
+      state: directory
+      owner: vagrant
+      group: vagrant
+      mode: 0755
+
+
+- name: Mon Livre II
+  hosts: master
+  become: no
+  gather_facts: False
+  tasks:
+  - name: Telechargement des fichiers github
+    git:
+      repo: "https://github.com/nicotrorigolo/tp_fil_rouge"
+      dest: "/home/vagrant/tp_fil_rouge"
+      clone: yes
+
+
+- name: Mon Livre III
+  hosts: master
+  become: yes
+  gather_facts: False
+  tasks:
+  - name: Récupération des fichiers dans le dossier tp_fil_rouge
+    copy:
+      src: "/home/vagrant/tp_fil_rouge/debut.py"
+      dest: "/home/vagrant/myproject"
+      owner: vagrant
+      group: vagrant
+      mode: 0755
+      remote_src: true
+
+  - name: Récupération des fichiers dans le dossier tp_fil_rouge
+    copy:
+      src: "/home/vagrant/tp_fil_rouge/wsgi.py"
+      dest: "/home/vagrant/myproject"
+      owner: vagrant
+      group: vagrant
+      mode: 0755
+      remote_src: true
+
+  - name: Récupération des fichiers dans le dossier tp_fil_rouge
+    copy:
+      src: "/home/vagrant/tp_fil_rouge/debut.service"
+      dest: "/etc/systemd/system/"
+      owner: vagrant
+      group: vagrant
+      mode: 0755
+      remote_src: true
+
+  - name: Récupération des fichiers dans le dossier tp_fil_rouge
+    copy:
+      src: "/home/vagrant/tp_fil_rouge/debut"
+      dest: "/etc/nginx/sites-available/"
+      owner: vagrant
+      group: vagrant
+      mode: 0755
+      remote_src: true
+
+  - name: Récupération des fichiers dans le dossier tp_fil_rouge
+    copy:
+      src: "/home/vagrant/tp_fil_rouge/requirements.txt"
+      dest: "/home/vagrant/myproject"
+      owner: vagrant
+      group: vagrant
+      mode: 0755
+      remote_src: true
+
+  - name: Mise en place d'un environnement virtuel
+    apt:
+      name:
+        - python3-venv
+        - python3-virtualenv
+        - virtualenv
+      state: present
+
+  - name: Installation des dependances dans l'environnement virtuel pour l'application
+    pip:
+      requirements: "/home/vagrant/myproject/requirements.txt"
+        # - flask
+        # - gunicorn
+      virtualenv: "/home/vagrant/myproject/myprojectenv" #mettre myprojectenv
+      virtualenv_python: python3
+
+  - name: Start systemd de l'application debut # C'est l'equivalent de la commande "systemctl start debut"
+    systemd:
+      name: "debut.service"
+      state: restarted
+      enabled: yes
+
+
+  - name: Créer le lien nginx
+    file:
+      path: "/etc/nginx/sites-enabled/debut"
+      state: touch 
+      # owner: vagrant
+      # group: vagrant
+      # mode: 0755
+
+  - name: Configurer le lien nginx
+    file: 
+      src: "/etc/nginx/sites-available/debut"
+      dest: "/etc/nginx/sites-enabled/debut"
+      state: link
+      force: yes
+      # owner: vagrant
+      # group: vagrant
+      # mode: 0755
+
+  - name: Redemarrage du nginx 
+    systemd:
+      name: "nginx"
+      state: restarted
+      enabled: yes

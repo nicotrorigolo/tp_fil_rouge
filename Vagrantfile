@@ -13,6 +13,6 @@ Vagrant.configure("2") do |config|
       sed -i 's/ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/g' /etc/ssh/sshd_config
       service ssh restart
       SHELL
-      config.vm.provision "shell", privileged: false, path: "set_env.sh"
+ #     config.vm.provision "shell", privileged: false, path: "set_env.sh"
     end
   end
