@@ -5,6 +5,5 @@ node{
     }
     stage('Build') {
         app = docker.build("nico/pika")
-
-
+    }
 }
