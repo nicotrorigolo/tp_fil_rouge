@@ -3,6 +3,9 @@ kind: Deployment
 metadata:
   name: debut
 spec:
+  selector:
+    matchLabels:
+      app: debut
   replicas: 5
   template:
     spec:

@@ -5,6 +5,9 @@ metadata:
   labels:
     app: debut
 spec:
+  selector:
+    matchLabels:
+      app: debut
   type: NodePort
   ports:
   - port: 5000
