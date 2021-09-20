@@ -10,6 +10,9 @@ spec:
       app: debut
   replicas: 5
   template:
+    metadata:
+      labels:
+        app: debut
     spec:
       containers:
       - name: debut
@@ -19,7 +22,6 @@ spec:
           value: PROD
         ports:
         - containerPort: 5000
-          name: monster-port
         livenessProbe:
           tcpSocket:
             port: 5000
@@ -30,11 +32,11 @@ spec:
           failureThreshold: 1
         readinessProbe:
           httpGet:
-            path: /healthz
+            path: /
             port: 5000
-            httpHeaders:
-            - name: Accept
-              value: application/json
+            # httpHeaders:
+            # - name: Accept
+            #   value: application/json
           initialDelaySeconds: 5
           timeoutSeconds: 1
           periodSeconds: 10
